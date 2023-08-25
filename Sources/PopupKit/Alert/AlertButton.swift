@@ -7,14 +7,19 @@
 
 import Foundation
 
-public final class AlertButton {
+public struct AlertButton: Equatable {
     
-    public init(text: String, action: @escaping () -> Void) {
+    public static func == (lhs: AlertButton, rhs: AlertButton) -> Bool {
+        lhs.text == rhs.text
+    }
+    
+    public init(text: String, role: AlertButtonRole = .regular, action: @escaping () -> Void) {
         self.text = text
+        self.role = role
         self.action = action
     }
     
-    
     var text: String
     var action: () -> Void
+    var role: AlertButtonRole
 }

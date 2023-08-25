@@ -7,16 +7,16 @@
 
 import Foundation
 
-public final class AppAlert {
+public struct AppAlert {
     
-    public init(title: String, body: String, buttons: [AlertButton]) {
+    public init(title: String?, message: String?, buttons: [AlertButton]) {
         self.title = title
-        self.body = body
+        self.message = message
         self.buttons = buttons
     }
     
-    public var title: String
-    public var body: String
+    public var title: String?
+    public var message: String?
     
     var buttons: [AlertButton]
 }
