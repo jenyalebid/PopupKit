@@ -15,7 +15,7 @@ class AlertViewModel: ObservableObject {
         case more
     }
         
-    var alert: AppAlert
+    var alert: SceneAlert
     var layout = ButtonLayout.single
     
     var dismissButton = AlertButton(text: "Cancel", role: .cancel, action: {})
@@ -24,7 +24,7 @@ class AlertViewModel: ObservableObject {
     var destructiveButtons = [AlertButton]()
     var regularButtons = [AlertButton]()
     
-    init(alert: AppAlert) {
+    init(alert: SceneAlert) {
         self.alert = alert
         sortButtons()
     }

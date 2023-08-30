@@ -1,5 +1,5 @@
 //
-//  AppAlert.swift
+//  SceneAlert.swift
 //  PopupKit
 //
 //  Created by Jenya Lebid on 8/23/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AppAlert {
+public struct SceneAlert {
     
     public init(title: String?, message: String?, buttons: [AlertButton]) {
         self.title = title

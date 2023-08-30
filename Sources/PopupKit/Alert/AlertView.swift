@@ -14,7 +14,7 @@ struct AlertView: View {
         
     @StateObject var viewModel: AlertViewModel
     
-    init(_ alert: AppAlert) {
+    init(_ alert: SceneAlert) {
         _viewModel = StateObject(wrappedValue: AlertViewModel(alert: alert))
     }
     
@@ -29,7 +29,7 @@ struct AlertView: View {
                     if let title = viewModel.alert.title {
                         Text(title)
                             .font(.headline)
-                            .padding()
+                            .padding([.leading, .top, .trailing])
                     }
                     if let message = viewModel.alert.message {
                         AlertMessageView(message: message)
@@ -142,7 +142,7 @@ fileprivate struct AlertMessageView: View {
 
 struct AlertView_Previews: PreviewProvider {
     static var previews: some View {
-        AlertView(AppAlert(title: "Test", message: "some message goes here. some message goes here. some message goes here. some message goes here. some message, asome mes", buttons: [AlertButton(text: "DO IT", role: .destructive, action: {}), AlertButton(text: "DO re", role: .regular, action: {})]))
+        AlertView(SceneAlert(title: "Test", message: "some message goes here. some message goes here. some message goes here. some message goes here. some message, asome mes", buttons: [AlertButton(text: "DO IT", role: .destructive, action: {}), AlertButton(text: "DO re", role: .regular, action: {})]))
             .previewDevice("iPhone SE (3rd generation)")
     }
 }

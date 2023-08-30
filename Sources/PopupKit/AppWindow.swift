@@ -13,8 +13,8 @@ public struct AppWindow<Content: View> {
     
     var content: Content
     
-    public init(@ViewBuilder _ content: () -> Content) {
-        self.content = content()
+    public init(_ content: Content) {
+        self.content = content
     }
     
     public func present() {

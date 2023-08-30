@@ -16,6 +16,7 @@ class WindowOverlayManager<Content: View> {
 
         let overlayController = OverlayUIHostingController(rootView: view)
         guard let window = UIApplication.shared.keyWindow else { return }
+        overlayController.view.backgroundColor = .clear
         window.addSubview(overlayController.view)
         overlayController.view.frame = window.bounds
 
@@ -26,15 +27,22 @@ class WindowOverlayManager<Content: View> {
         currentOverlay?.view.removeFromSuperview()
         currentOverlay = nil
     }
-}
-
-extension UIApplication {
     
-    var keyWindow: UIWindow? {
-       connectedScenes
-            .filter { $0.activationState == .foregroundActive }
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first { $0.isKeyWindow }
+    var alertWindow: UIWindow?
+
+    func showAlert() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+        
+        alertWindow = UIWindow(windowScene: windowScene)
+        alertWindow?.windowLevel = .alert + 1  // Make it appear above other alerts
+//        alertWindow?.rootViewController = YourAlertViewController()  // Your custom alert ViewController
+        alertWindow?.makeKeyAndVisible()
+    }
+
+    func hideAlert() {
+        alertWindow?.isHidden = true
+        alertWindow = nil
     }
 }
+
+
