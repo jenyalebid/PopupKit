@@ -9,21 +9,19 @@ import SwiftUI
 
 struct WindowContentHost<Content: View>: View {
     
-    @EnvironmentObject var viewModel: WindowViewModel
+    @EnvironmentObject var viewModel: WindowViewModel<Content>
     var content: Content
     
     var body: some View {
-        VStack {
+        ZStack {
             if viewModel.isContentPresented {
                 content
                     .onDisappear {
                         viewModel.isWindowPresented = false
                     }
             }
-            else {
-                Text("WHAT")
-            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation {

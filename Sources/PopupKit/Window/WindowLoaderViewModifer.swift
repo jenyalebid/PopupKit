@@ -10,11 +10,13 @@ import SwiftUI
 fileprivate struct WindowLoaderViewModifer<WindowContent: View>: ViewModifier {
 
     var window: SceneWindow
-    var windowContent: WindowContent
+    var windowContent: WindowContent    
+    @Binding var size: CGSize
         
-    init(for window: SceneWindow, windowContent: WindowContent) {
+    init(for window: SceneWindow, windowContent: WindowContent, size: Binding<CGSize>) {
         self.window = window
         self.windowContent = windowContent
+        self._size = size
     }
     
     func body(content: Content) -> some View {
@@ -22,29 +24,21 @@ fileprivate struct WindowLoaderViewModifer<WindowContent: View>: ViewModifier {
             .background(
                 SceneFetcher { scene in
                     if let scene {
-                        loadWindow(in: scene)
+                        load(in: scene)
                     }
                 }
             )
     }
     
-    func loadWindow(in scene: UIWindowScene) {
-        let contentController = UIHostingController(rootView: windowContent)
-        window.load(contentController, in: scene)
+    func load(in scene: UIWindowScene) {
+        let controller = UIHostingController(rootView: windowContent)
+        controller.view.backgroundColor = .clear
+        window.load(controller, in: scene)
     }
 }
 
 extension View {
-    
-    func windowLoader<WindowContent: View>(for window: SceneWindow, windowContent: WindowContent) -> some View {
-        modifier(WindowLoaderViewModifer(for: window, windowContent: windowContent))
-    }
-}
-
-fileprivate struct WindowPresenterViewModifer_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            
-        }
+    func windowLoader<WindowContent: View>(for window: SceneWindow, windowContent: WindowContent, size: Binding<CGSize>) -> some View {
+        modifier(WindowLoaderViewModifer(for: window, windowContent: windowContent, size: size))
     }
 }

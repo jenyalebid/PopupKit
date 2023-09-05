@@ -12,31 +12,22 @@ struct WindowViewModifier<WindowContent: View>: ViewModifier {
     @Binding var isPresented: Bool
     @ViewBuilder var windowContent: WindowContent
 
-    @StateObject var viewModel: WindowViewModel
+    @StateObject var viewModel: WindowViewModel<WindowContent>
     
     init(level: UIWindow.Level, isPresented: Binding<Bool>, @ViewBuilder windowContent: () -> WindowContent) {
         _viewModel = StateObject(wrappedValue: WindowViewModel(level: level, isPresented: isPresented.wrappedValue))
         self._isPresented = isPresented
         self.windowContent = windowContent()
     }
-    
-    //TODO: Move things into viewModel.
-    
+        
     func body(content: Content) -> some View {
         content
-            .windowLoader(for: viewModel.window, windowContent: contentHost)
+            .windowLoader(for: viewModel.window, windowContent: contentHost, size: $viewModel.contentSize)
             .onChange(of: isPresented) { presented in
-                if presented {
-                    viewModel.isWindowPresented = true
-                }
-                else {
-                    withAnimation {
-                        viewModel.isContentPresented = presented
-                    }
-                }
+                viewModel.manageContentPresentation(isPresented: presented)
             }
             .onChange(of: viewModel.isWindowPresented) { presented in
-                presented ? viewModel.window.makeKeyAndVisible() : viewModel.window.destroy()
+                viewModel.manageWindowVisibility(isPresented: presented)
             }
     }
     
@@ -47,16 +38,7 @@ struct WindowViewModifier<WindowContent: View>: ViewModifier {
 }
 
 public extension View {
-    
     func window<Content: View>(level: UIWindow.Level = .normal, isPresented: Binding<Bool>, @ViewBuilder content: () -> Content) -> some View {
         modifier(WindowViewModifier(level: level, isPresented: isPresented, windowContent: content))
-    }
-}
-
-struct WindowViewModifier_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            
-        }
     }
 }
