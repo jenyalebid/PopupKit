@@ -10,20 +10,18 @@ import SwiftUI
 fileprivate struct WindowLoaderViewModifer<WindowContent: View>: ViewModifier {
 
     var window: SceneWindow
-    var windowContent: WindowContent    
-    @Binding var size: CGSize
+    var windowContent: WindowContent
         
-    init(for window: SceneWindow, windowContent: WindowContent, size: Binding<CGSize>) {
+    init(for window: SceneWindow, windowContent: WindowContent) {
         self.window = window
         self.windowContent = windowContent
-        self._size = size
     }
     
     func body(content: Content) -> some View {
         content
             .background(
-                SceneFetcher { scene in
-                    if let scene {
+                UIKitViewFetcher { view in
+                    if let scene = view.window?.windowScene {
                         load(in: scene)
                     }
                 }
@@ -38,7 +36,7 @@ fileprivate struct WindowLoaderViewModifer<WindowContent: View>: ViewModifier {
 }
 
 extension View {
-    func windowLoader<WindowContent: View>(for window: SceneWindow, windowContent: WindowContent, size: Binding<CGSize>) -> some View {
-        modifier(WindowLoaderViewModifer(for: window, windowContent: windowContent, size: size))
+    func windowLoader<WindowContent: View>(for window: SceneWindow, windowContent: WindowContent) -> some View {
+        modifier(WindowLoaderViewModifer(for: window, windowContent: windowContent))
     }
 }

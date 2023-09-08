@@ -1,5 +1,5 @@
 //
-//  WindowContentHost.swift
+//  PopupContentHost.swift
 //  PopupKit
 //
 //  Created by Jenya Lebid on 8/29/23.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct WindowContentHost<Content: View>: View {
+struct PopupContentHost<Content: View>: View {
     
-    @EnvironmentObject var viewModel: WindowViewModel<Content>
+    @EnvironmentObject var viewModel: PopupViewModel
     var content: Content
     
     var body: some View {
@@ -17,11 +17,10 @@ struct WindowContentHost<Content: View>: View {
             if viewModel.isContentPresented {
                 content
                     .onDisappear {
-                        viewModel.isWindowPresented = false
+                        viewModel.isPopupPresented = false
                     }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation {

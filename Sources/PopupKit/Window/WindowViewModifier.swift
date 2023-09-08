@@ -10,29 +10,32 @@ import SwiftUI
 struct WindowViewModifier<WindowContent: View>: ViewModifier {
         
     @Binding var isPresented: Bool
-    @ViewBuilder var windowContent: WindowContent
-
-    @StateObject var viewModel: WindowViewModel<WindowContent>
+    var windowContent: WindowContent
     
-    init(level: UIWindow.Level, isPresented: Binding<Bool>, @ViewBuilder windowContent: () -> WindowContent) {
-        _viewModel = StateObject(wrappedValue: WindowViewModel(level: level, isPresented: isPresented.wrappedValue))
+    @State var window: SceneWindow
+
+    @StateObject var viewModel: PopupViewModel
+    
+    init(level: UIWindow.Level, isPresented: Binding<Bool>, windowContent: () -> WindowContent) {
+        _viewModel = StateObject(wrappedValue: PopupViewModel(isPresented: isPresented.wrappedValue))
         self._isPresented = isPresented
+        _window = State(wrappedValue: SceneWindow(level: level))
         self.windowContent = windowContent()
     }
         
     func body(content: Content) -> some View {
         content
-            .windowLoader(for: viewModel.window, windowContent: contentHost, size: $viewModel.contentSize)
+            .windowLoader(for: window, windowContent: contentHost)
             .onChange(of: isPresented) { presented in
                 viewModel.manageContentPresentation(isPresented: presented)
             }
-            .onChange(of: viewModel.isWindowPresented) { presented in
-                viewModel.manageWindowVisibility(isPresented: presented)
+            .onChange(of: viewModel.isPopupPresented) { presented in
+                presented ? window.show() : window.destroy()
             }
     }
-    
+
     var contentHost: some View {
-        WindowContentHost(content: windowContent)
+        PopupContentHost(content: windowContent)
             .environmentObject(viewModel)
     }
 }
