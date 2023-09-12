@@ -7,18 +7,24 @@
 
 import SwiftUI
 
-struct PopupContentHost<Content: View>: View {
+struct PopupContentHost<Content: View, Background: View>: View {
     
     @EnvironmentObject var viewModel: PopupViewModel
+    
     var content: Content
+    @ViewBuilder var background: Background
     
     var body: some View {
-        ZStack {
-            if viewModel.isContentPresented {
-                content
-                    .onDisappear {
-                        viewModel.isPopupPresented = false
-                    }
+        Group {
+            ZStack {
+                if viewModel.isContentPresented {
+                    content
+                        .zIndex(1) // SwiftUI...
+                        .onDisappear {
+                            viewModel.isPopupPresented = false
+                        }
+                    background
+                }
             }
         }
         .onAppear {

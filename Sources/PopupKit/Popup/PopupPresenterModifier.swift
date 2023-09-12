@@ -1,5 +1,5 @@
 //
-//  PopoutPresenterModifier.swift
+//  PopupPresenterModifier.swift
 //  PopupKit
 //
 //  Created by Jenya Lebid on 9/7/23.
@@ -7,42 +7,33 @@
 
 import SwiftUI
 
-struct PopoutPresenterModifier<PopoutContent: View>: ViewModifier {
+struct PopupPresenterModifier<PopupContent: View>: ViewModifier {
     
-    var popoutContent: PopoutContent
+    var popupContent: PopupContent
     
     @State var topController: UIViewController?
-    
     @Binding var isPresented: Bool
-    @State private var trigger: Bool = false
     
     @State var rect: CGRect?
     @State var scene: UIWindowScene?
 
-    init(isPresented: Binding<Bool>, popoutContent: PopoutContent) {
+    init(isPresented: Binding<Bool>, popoutContent: PopupContent) {
         self._isPresented = isPresented
-        self.popoutContent = popoutContent
+        self.popupContent = popoutContent
     }
     
     func body(content: Content) -> some View {
         content
-            .background(
-                UIKitViewFetcher { view in
-                    DispatchQueue.main.async {
-                        self.scene = view.window?.windowScene
-                        if let window = view.window {
-                            self.rect = view.convert(view.bounds, to: window)
-                        }
+            .uiViewFetcher { view in
+                DispatchQueue.main.async {
+                    self.scene = view.window?.windowScene
+                    if let window = view.window {
+                        self.rect = view.convert(view.bounds, to: window)
                     }
                 }
-            )
+            }
             .onChange(of: isPresented) { presented in
                 presented ? present() : topController?.dismiss(animated: false)
-            }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.trigger.toggle()
-                }
             }
     }
     
@@ -53,10 +44,10 @@ struct PopoutPresenterModifier<PopoutContent: View>: ViewModifier {
         DispatchQueue.main.async {
             self.topController = topController
         }
-
-        let hostController = UIHostingController(rootView: popoutContent)
-        hostController.modalPresentationStyle = .custom
+        let hostController = UIHostingController(rootView: popupContent)
         hostController.view.backgroundColor = .clear
+
+        hostController.modalPresentationStyle = .overFullScreen
         topController.present(hostController, animated: false)
     }
 }

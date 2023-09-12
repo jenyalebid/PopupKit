@@ -35,8 +35,10 @@ struct WindowViewModifier<WindowContent: View>: ViewModifier {
     }
 
     var contentHost: some View {
-        PopupContentHost(content: windowContent)
-            .environmentObject(viewModel)
+        PopupContentHost(content: windowContent) {
+            EmptyView()
+        }
+        .environmentObject(viewModel)
     }
 }
 

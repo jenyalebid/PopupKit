@@ -19,13 +19,11 @@ fileprivate struct WindowLoaderViewModifer<WindowContent: View>: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .background(
-                UIKitViewFetcher { view in
-                    if let scene = view.window?.windowScene {
-                        load(in: scene)
-                    }
+            .uiViewFetcher { view in
+                if let scene = view.window?.windowScene {
+                    load(in: scene)
                 }
-            )
+            }
     }
     
     func load(in scene: UIWindowScene) {

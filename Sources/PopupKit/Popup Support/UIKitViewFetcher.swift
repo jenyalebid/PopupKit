@@ -21,13 +21,30 @@ struct UIKitViewFetcher: UIViewRepresentable {
     }
 }
 
-//    var callback: (UIWindowScene?) -> ()
-//
-//    func makeUIViewController(context: Context) -> UIViewController {
-//        let viewController = UIViewController()
-//        return viewController
-//    }
-//
-//    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-//        callback(uiViewController.view.window?.windowScene)
-//    }
+struct UIKitViewFetcherModifier: ViewModifier {
+    
+    var callback: (UIView) -> Void
+    
+    @State private var viewUpdateTrigger = false
+    
+    func body(content: Content) -> some View {
+        content
+            .background(
+                UIKitViewFetcher { view in
+                    callback(view)
+                }
+            )
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.viewUpdateTrigger.toggle()
+                }
+            }
+    }
+}
+
+extension View {
+    
+    func uiViewFetcher(_ uiView: @escaping (UIView) -> Void) -> some View {
+        modifier(UIKitViewFetcherModifier(callback: uiView))
+    }
+}
