@@ -10,7 +10,6 @@ import UIKit
 
 struct SceneAlertModifier: ViewModifier {
     
-    
     @Binding var isPresented: Bool
     let alert: SceneAlert
 

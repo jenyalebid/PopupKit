@@ -8,7 +8,19 @@
 import Foundation
 import UIKit
 
-public struct SceneAlert {
+public struct SceneAlert: Equatable {
+    
+    public static func == (lhs: SceneAlert, rhs: SceneAlert) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    public var title: String?
+    public var message: String?
+    
+    public var textFields: [AlertTextField]?
+    public var buttons: [AlertButton]?
+    
+    var id = UUID()
     
     public init(title: String?, message: String?, textFields: [AlertTextField]? = nil, buttons: [AlertButton]?) {
         self.title = title
@@ -16,12 +28,6 @@ public struct SceneAlert {
         self.textFields = textFields
         self.buttons = buttons
     }
-    
-    public var title: String?
-    public var message: String?
-    
-    public var textFields: [AlertTextField]?
-    public var buttons: [AlertButton]?
 }
 
 extension SceneAlert {
