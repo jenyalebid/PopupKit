@@ -36,7 +36,7 @@ struct AlertManagerModifier: ViewModifier {
 
 public extension View {
     
-    var alertManager: some View {
+    var popupPresenter: some View {
         modifier(AlertManagerModifier())
     }
 }
