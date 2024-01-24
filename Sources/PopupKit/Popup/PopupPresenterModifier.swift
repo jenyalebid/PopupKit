@@ -32,7 +32,7 @@ struct PopupPresenterModifier<PopupContent: View>: ViewModifier {
                     }
                 }
             }
-            .onChange(of: isPresented) { presented in
+            .onChange(of: isPresented) { _, presented in
                 presented ? present() : topController?.dismiss(animated: false)
             }
     }

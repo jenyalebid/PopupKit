@@ -15,7 +15,7 @@ struct SceneAlertModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .onChange(of: isPresented) { newValue in
+            .onChange(of: isPresented) { _, newValue in
                 if newValue {
                     presentAlert()
                 }
@@ -23,32 +23,11 @@ struct SceneAlertModifier: ViewModifier {
     }
 
     private func presentAlert() {
-        guard let topViewController = findTopViewControllerInCurrentScene() else { return }
+        guard let topViewController = PK.findTopViewControllerInForegroundScene() else { return }
         let alertController = alert.uiAlert
         topViewController.present(alertController, animated: true) {
             self.isPresented = false
         }
-    }
-
-    private func findTopViewControllerInCurrentScene() -> UIViewController? {
-        guard let currentScene = UIApplication.shared
-                .connectedScenes
-                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene else {
-            return nil
-        }
-
-        guard let rootViewController = currentScene.windows.first(where: { $0.isKeyWindow })?.rootViewController else {
-            return nil
-        }
-
-        return findTopViewController(controller: rootViewController)
-    }
-
-    private func findTopViewController(controller: UIViewController) -> UIViewController {
-        if let presented = controller.presentedViewController {
-            return findTopViewController(controller: presented)
-        }
-        return controller
     }
 }
 

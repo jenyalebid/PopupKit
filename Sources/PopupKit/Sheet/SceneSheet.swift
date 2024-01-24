@@ -5,25 +5,26 @@
 //  Created by Jenya Lebid on 1/12/24.
 //
 
-import SwiftUI
+//import SwiftUI
 
-struct SceneSheet<Content: View>: UIViewControllerRepresentable {
-    
-    @Binding var isPresented: Bool
-    let content: () -> Content
-
-    func makeUIViewController(context: Context) -> UIViewController {
-        UIViewController()
-    }
-
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        if isPresented {
-            let hostingController = UIHostingController(rootView: content())
-            hostingController.modalPresentationStyle = .formSheet
-            UIApplication.topMostViewController(from: uiViewController)?.present(hostingController, animated: true)
-//            findTopMostViewController()?.present(hostingController, animated: true)
-        }
-    }
+//struct SceneSheet<Content: View>: UIViewControllerRepresentable {
+//    
+//    @Binding var isPresented: Bool
+//    var style: UIModalPresentationStyle
+//    let content: () -> Content
+//
+//    func makeUIViewController(context: Context) -> UIViewController {
+//        UIViewController()
+//    }
+//
+//    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+//        if isPresented {
+//            let hostingController = UIHostingController(rootView: content())
+//            hostingController.modalPresentationStyle = style
+//            UIApplication.topMostViewController(from: uiViewController)?.present(hostingController, animated: true)
+////            findTopMostViewController()?.present(hostingController, animated: true)
+//        }
+//    }
 
 //    private func findTopMostViewController(_ base: UIViewController? = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController) -> UIViewController? {
 //        if let nav = base as? UINavigationController {
@@ -37,4 +38,4 @@ struct SceneSheet<Content: View>: UIViewControllerRepresentable {
 //        }
 //        return base
 //    }
-}
+//}
