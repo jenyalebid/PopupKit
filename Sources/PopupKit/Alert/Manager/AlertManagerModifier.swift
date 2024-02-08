@@ -17,6 +17,9 @@ struct AlertManagerModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .sceneAlert(isPresented: $manager.isAlertPresented, alert: currentAlert)
+            .overlay {
+                PopoutView()
+            }
             .onChange(of: manager.isAlertPresented) { _, presented in
                 if !presented {
                     manager.presentNextIfExists()
