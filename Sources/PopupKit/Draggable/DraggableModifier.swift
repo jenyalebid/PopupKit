@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct DraggableModifier: ViewModifier {
-    
-    var initialAlignment: Alignment
+        
+    @Binding var alignment: Alignment
     
     @State private var position: CGPoint = .zero
     @State private var dragStartInitialPosition: CGPoint = .zero
@@ -26,11 +26,11 @@ struct DraggableModifier: ViewModifier {
                             .fill(.clear)
                             .onAppear {
                                 contentSize = contentGeometry.size
-                                position = position(from: initialAlignment, parentSize: geometry.size, childSize: contentSize)
+                                position = position(from: alignment, parentSize: geometry.size, childSize: contentSize)
                             }
                             .onChange(of: contentGeometry.size) { oldValue, newValue in
                                 contentSize = contentGeometry.size
-                                position = position(from: initialAlignment, parentSize: geometry.size, childSize: contentSize)
+                                position = position(from: alignment, parentSize: geometry.size, childSize: contentSize)
                             }
                     }
                 )
@@ -49,6 +49,8 @@ struct DraggableModifier: ViewModifier {
                             let alignment = calculateAlignment(from: value.location, in: geometry.size)
                             position = position(from: alignment, parentSize: geometry.size, childSize: contentSize)
                             dragStartInitialPosition = position
+                            
+                            self.alignment = calculateAlignment(from: position, in: geometry.size)
                         }
                 )
                 .animation(.interactiveSpring(response: 0.55, dampingFraction: 0.65, blendDuration: 0.95), value: position)
@@ -151,7 +153,7 @@ extension DraggableModifier {
 }
 
 public extension View {
-    func draggable(initialAlignment: Alignment) -> some View {
-        self.modifier(DraggableModifier(initialAlignment: initialAlignment))
+    func draggable(alignment: Binding<Alignment>) -> some View {
+        self.modifier(DraggableModifier(alignment: alignment))
     }
 }
