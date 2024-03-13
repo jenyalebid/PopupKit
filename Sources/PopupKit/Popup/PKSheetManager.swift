@@ -16,7 +16,7 @@ public class PKSheetManager {
     
     public func presentSheet<Content: View>(style: UIModalPresentationStyle = .automatic, @ViewBuilder _ content: @escaping () -> Content) {
         DispatchQueue.main.async {
-            guard let topController = PK.findTopViewControllerInForegroundScene() else {
+            guard let topController = UIViewController.findTopMostViewController() else {
                 print("PopupKit Error: Top ViewController for active foreground Scene could not be found.")
                 return
             }

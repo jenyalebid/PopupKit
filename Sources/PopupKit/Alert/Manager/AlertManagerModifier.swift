@@ -10,9 +10,9 @@ import SwiftUI
 struct AlertManagerModifier: ViewModifier {
     
     @Bindable private var manager = AlertManager.shared
-    @State private var currentAlert = SceneAlert(title: "Empty", message: "This should not be presented.", buttons: nil)
+    @State private var currentAlert = SceneAlert(title: "Empty", message: "This should not be presented.", buttons: [.ok])
     
-    private var emptyAlert = SceneAlert(title: "Empty", message: "This should not be presented.", buttons: nil)
+    private var emptyAlert = SceneAlert(title: "Empty", message: "This should not be presented.", buttons: [.ok])
     
     func body(content: Content) -> some View {
         content

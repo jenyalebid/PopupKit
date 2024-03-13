@@ -40,11 +40,6 @@ extension AlertManager {
 public extension AlertManager {
     
     func presentAlert(_ alert: SceneAlert) {
-        if activeAlert == nil {
-            activeAlert = alert
-        }
-        else {
-            alertQueue.append(alert)
-        }
+        activeAlert = alert
     }
 }

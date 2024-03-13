@@ -16,6 +16,7 @@ struct SceneAlertModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .onChange(of: isPresented) { _, newValue in
+                print(#function)
                 if newValue {
                     presentAlert()
                 }
@@ -23,7 +24,7 @@ struct SceneAlertModifier: ViewModifier {
     }
 
     private func presentAlert() {
-        guard let topViewController = PK.findTopViewControllerInForegroundScene() else { return }
+        guard let topViewController = UIViewController.findTopMostViewController() else { return }
         let alertController = alert.uiAlert
         topViewController.present(alertController, animated: true) {
             self.isPresented = false

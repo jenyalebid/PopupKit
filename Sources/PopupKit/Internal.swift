@@ -35,13 +35,37 @@ internal class PK {
     static func findTopViewControllerInForegroundScene() -> UIViewController? {
         guard let currentScene = UIApplication.shared.connectedScenes
             .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene else {
-            return nil
+            fatalError("No connected Scene")
         }
 
         guard let rootViewController = currentScene.windows.first(where: { $0.isKeyWindow })?.rootViewController else {
-            return nil
+            fatalError("No root")
         }
 
         return findTopViewController(in: rootViewController)
+    }
+}
+
+extension UIViewController {
+    
+    static func findTopMostViewController(base: UIViewController? = nil) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return PK.findTopViewController(in: nav)
+        }
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController {
+                return PK.findTopViewController(in: selected)
+            }
+            return PK.findTopViewController(in: tab)
+        }
+        if let presented = base?.presentedViewController {
+            return PK.findTopViewController(in: presented)
+        }
+        
+        if let root = UIApplication.shared.windows.first?.rootViewController {
+            return PK.findTopViewController(in: root)
+        }
+        
+        fatalError("No Base")
     }
 }
