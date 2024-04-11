@@ -45,5 +45,9 @@ public extension AlertButton {
     static var cancel: AlertButton {
         AlertButton(title: "Cancel", style: .cancel, action: {})
     }
+    
+    static var notNow: AlertButton {
+        AlertButton(title: "Not Now", style: .cancel, action: {})
+    }
 }
 
