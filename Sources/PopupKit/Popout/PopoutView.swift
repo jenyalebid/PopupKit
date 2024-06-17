@@ -61,3 +61,13 @@ struct PopoutView: View {
         }
     }
 }
+
+public extension View {
+    
+    var popouts: some View {
+        self
+            .overlay {
+                PopoutView()
+            }
+    }
+}
