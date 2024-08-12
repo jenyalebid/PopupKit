@@ -42,6 +42,13 @@ public extension View {
     var popupPresenter: some View {
         modifier(AlertManagerModifier())
     }
+    
+    var popoutPresenter: some View {
+        self
+            .overlay {
+                PopoutView()
+            }
+    }
 }
 
 
